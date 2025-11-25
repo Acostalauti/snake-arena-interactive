@@ -1,0 +1,239 @@
+openapi: 3.0.0
+info:
+  title: Snake Arena API
+  version: 1.0.0
+paths:
+  /auth/login:
+    post:
+      summary: Login user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - email
+                - password
+      responses:
+        '200':
+          description: Successful login
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          description: Invalid credentials
+  /auth/signup:
+    post:
+      summary: Register new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - username
+                - email
+                - password
+      responses:
+        '200':
+          description: Successful signup
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  /auth/logout:
+    post:
+      summary: Logout user
+      responses:
+        '200':
+          description: Successful logout
+  /auth/me:
+    get:
+      summary: Get current user
+      responses:
+        '200':
+          description: Current user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          description: Not logged in
+  /leaderboard:
+    get:
+      summary: Get leaderboard entries
+      parameters:
+        - in: query
+          name: mode
+          schema:
+            $ref: '#/components/schemas/GameMode'
+      responses:
+        '200':
+          description: List of leaderboard entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LeaderboardEntry'
+    post:
+      summary: Submit score
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                score:
+                  type: number
+                mode:
+                  $ref: '#/components/schemas/GameMode'
+              required:
+                - score
+                - mode
+      responses:
+        '200':
+          description: Score submitted
+        '401':
+          description: Not logged in
+  /spectator/active:
+    get:
+      summary: Get active players
+      responses:
+        '200':
+          description: List of active players
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ActivePlayer'
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        username:
+          type: string
+        email:
+          type: string
+      required:
+        - id
+        - username
+        - email
+    LeaderboardEntry:
+      type: object
+      properties:
+        id:
+          type: string
+        username:
+          type: string
+        score:
+          type: number
+        mode:
+          $ref: '#/components/schemas/GameMode'
+        date:
+          type: string
+      required:
+        - id
+        - username
+        - score
+        - mode
+        - date
+    ActivePlayer:
+      type: object
+      properties:
+        id:
+          type: string
+        username:
+          type: string
+        score:
+          type: number
+        mode:
+          $ref: '#/components/schemas/GameMode'
+        gameState:
+          $ref: '#/components/schemas/GameState'
+      required:
+        - id
+        - username
+        - score
+        - mode
+        - gameState
+    GameState:
+      type: object
+      properties:
+        snake:
+          $ref: '#/components/schemas/Snake'
+        food:
+          $ref: '#/components/schemas/Position'
+        score:
+          type: number
+        status:
+          $ref: '#/components/schemas/GameStatus'
+        mode:
+          $ref: '#/components/schemas/GameMode'
+      required:
+        - snake
+        - food
+        - score
+        - status
+        - mode
+    Snake:
+      type: object
+      properties:
+        body:
+          type: array
+          items:
+            $ref: '#/components/schemas/Position'
+        direction:
+          $ref: '#/components/schemas/Direction'
+      required:
+        - body
+        - direction
+    Position:
+      type: object
+      properties:
+        x:
+          type: number
+        y:
+          type: number
+      required:
+        - x
+        - y
+    GameMode:
+      type: string
+      enum:
+        - walls
+        - pass-through
+    GameStatus:
+      type: string
+      enum:
+        - idle
+        - playing
+        - paused
+        - game-over
+    Direction:
+      type: string
+      enum:
+        - UP
+        - DOWN
+        - LEFT
+        - RIGHT
