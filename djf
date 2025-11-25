@@ -1,0 +1,91 @@
+[33mcommit 5129ea6e403eed69a8f041aa8f777a24388b7dda[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Author: Acostalauti <lautaro.eacosta@gmail.com>
+Date:   Tue Nov 25 02:47:29 2025 +0000
+
+    Migrate backend to SQLAlchemy with PostgreSQL/SQLite support
+    
+    - Install SQLAlchemy, psycopg2-binary, alembic, python-dotenv
+    - Create db_models.py with User and LeaderboardEntry tables
+    - Create db_config.py for database configuration and session management
+    - Migrate database.py from mock data to real database operations
+    - Update auth.py endpoints to use database
+    - Update main.py with database initialization on startup
+    - Add .env support for database configuration
+    - Update .gitignore to exclude database files and .env
+    - Add DATABASE.md documentation
+
+[33mcommit a2e4f3486896c09c2d0a7512e14bb84cb6592f94[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Acostalauti <lautaro.eacosta@gmail.com>
+Date:   Tue Nov 25 02:30:26 2025 +0000
+
+    running both frontend and backend
+
+[33mcommit 932e6857c405f8ce1e53e73eb7f731cabbad48e6[m
+Author: Acostalauti <lautaro.eacosta@gmail.com>
+Date:   Tue Nov 25 02:28:04 2025 +0000
+
+    Add fake users to mock database for testing
+
+[33mcommit a342ef25757917db65f7054b0901ec97c580186d[m
+Author: Acostalauti <lautaro.eacosta@gmail.com>
+Date:   Tue Nov 25 02:12:08 2025 +0000
+
+    Add Makefile for backend development commands
+
+[33mcommit b7b900accb53332f384d68cfed11178f0c943c63[m
+Author: Acostalauti <lautaro.eacosta@gmail.com>
+Date:   Tue Nov 25 02:09:22 2025 +0000
+
+    Connect frontend to backend API - implement real API client and update all components
+
+[33mcommit fd321b2acb658097f9bd33aadd0b2edc3479ff23[m
+Author: Acostalauti <lautaro.eacosta@gmail.com>
+Date:   Tue Nov 25 01:54:04 2025 +0000
+
+    backend working
+
+[33mcommit fa04a2ba33ab8c72252fde4efdaed5507d54610d[m
+Author: Acostalauti <lautaro.eacosta@gmail.com>
+Date:   Tue Nov 25 00:49:38 2025 +0000
+
+    frontend tests working
+
+[33mcommit f65ed7d697ee7950efff82b5c0349dcee4b53fcd[m
+Merge: 9e3c77e b4f58f1
+Author: gpt-engineer-app[bot] <159125892+gpt-engineer-app[bot]@users.noreply.github.com>
+Date:   Mon Nov 24 21:08:05 2025 +0000
+
+    Fix router context issue
+    
+    Resolve runtime error where Link cannot access Router context by restructuring App.tsx to ensure BrowserRouter is the outermost provider, preventing Header/Link usage outside a Router. This includes centralizing router setup to avoid multiple router instances and context null errors.
+    
+    X-Lovable-Edit-ID: edt-a0ac70e5-d70d-425d-a1be-5a397b402bd3
+
+[33mcommit b4f58f1d7bc46cfecb56fa7527d93f40e21bea35[m
+Author: gpt-engineer-app[bot] <159125892+gpt-engineer-app[bot]@users.noreply.github.com>
+Date:   Mon Nov 24 21:08:05 2025 +0000
+
+    Changes
+
+[33mcommit 9e3c77edad06ffdb3761e38edac4ea150534540f[m
+Merge: d8d93f2 fcdb2fc
+Author: gpt-engineer-app[bot] <159125892+gpt-engineer-app[bot]@users.noreply.github.com>
+Date:   Mon Nov 24 21:05:21 2025 +0000
+
+    Build Snake Arena UI
+    
+    Implement a full-featured Snake Arena with two game modes (walls and pass-through), mocked authentication, leaderboard, spectator mode with bot players, and centralized mock API calls. Added tests covering game logic, bot logic, and API.
+    
+    X-Lovable-Edit-ID: edt-2d6619f1-8b93-4ed3-ada8-58de294d3dad
+
+[33mcommit fcdb2fccf748af4ee93cb26baf45f02d063ead42[m
+Author: gpt-engineer-app[bot] <159125892+gpt-engineer-app[bot]@users.noreply.github.com>
+Date:   Mon Nov 24 21:05:20 2025 +0000
+
+    Changes
+
+[33mcommit d8d93f20b3bd35d7b4280be16ff38a7ef79237cc[m
+Author: gpt-engineer-app[bot] <159125892+gpt-engineer-app[bot]@users.noreply.github.com>
+Date:   Mon Nov 24 21:01:12 2025 +0000
+
+    Initial commit from template vite_react_shadcn_ts_20250728_minor
