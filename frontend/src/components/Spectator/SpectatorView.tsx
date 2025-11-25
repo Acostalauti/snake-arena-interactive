@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ActivePlayer } from '@/types/game';
-import { mockApi } from '@/lib/mockApi';
+import { api } from '@/lib/api';
 import { GameBoard } from '@/components/Game/GameBoard';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -19,14 +19,14 @@ export const SpectatorView = () => {
     if (players.length === 0) return;
 
     const interval = setInterval(() => {
-      setPlayers(prev => 
+      setPlayers(prev =>
         prev.map(player => {
           if (player.gameState.status !== 'playing') return player;
 
           // Calculate bot's next move
           const botDirection = calculateBotDirection(player.gameState);
           const newDirection = changeDirection(player.gameState.snake.direction, botDirection);
-          
+
           const updatedState = {
             ...player.gameState,
             snake: {
@@ -52,7 +52,7 @@ export const SpectatorView = () => {
   const loadPlayers = async () => {
     setIsLoading(true);
     try {
-      const data = await mockApi.spectator.getActivePlayers();
+      const data = await api.spectator.getActivePlayers();
       setPlayers(data);
     } catch (error) {
       console.error('Failed to load active players:', error);
@@ -80,7 +80,7 @@ export const SpectatorView = () => {
   return (
     <div className="space-y-6">
       <h2 className="text-3xl font-bold neon-text">Watch Live Games</h2>
-      
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {players.map(player => (
           <Card key={player.id} className="p-6 space-y-4">
@@ -102,7 +102,7 @@ export const SpectatorView = () => {
                 </Badge>
               )}
             </div>
-            
+
             <div className="flex justify-center">
               <div className="scale-75 origin-top">
                 <GameBoard gameState={player.gameState} />

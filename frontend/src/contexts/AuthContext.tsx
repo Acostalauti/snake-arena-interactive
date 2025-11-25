@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { User } from '@/types/game';
-import { mockApi } from '@/lib/mockApi';
+import { api } from '@/lib/api';
 
 interface AuthContextType {
   user: User | null;
@@ -17,23 +17,32 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const currentUser = mockApi.auth.getCurrentUser();
-    setUser(currentUser);
-    setIsLoading(false);
+    const loadUser = async () => {
+      try {
+        const currentUser = await api.auth.getCurrentUser();
+        setUser(currentUser);
+      } catch (error) {
+        console.error('Failed to load user:', error);
+        setUser(null);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    loadUser();
   }, []);
 
   const login = async (email: string, password: string) => {
-    const user = await mockApi.auth.login(email, password);
+    const user = await api.auth.login(email, password);
     setUser(user);
   };
 
   const signup = async (username: string, email: string, password: string) => {
-    const user = await mockApi.auth.signup(username, email, password);
+    const user = await api.auth.signup(username, email, password);
     setUser(user);
   };
 
   const logout = async () => {
-    await mockApi.auth.logout();
+    await api.auth.logout();
     setUser(null);
   };
 

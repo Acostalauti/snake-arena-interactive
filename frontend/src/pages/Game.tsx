@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { GameState, Direction, GameMode } from '@/types/game';
 import { createInitialGameState, moveSnake, changeDirection } from '@/lib/gameLogic';
-import { mockApi } from '@/lib/mockApi';
+import { api } from '@/lib/api';
 import { GameBoard } from '@/components/Game/GameBoard';
 import { GameControls } from '@/components/Game/GameControls';
 import { Header } from '@/components/Layout/Header';
@@ -27,11 +27,11 @@ const Game = () => {
     const gameLoop = setInterval(() => {
       setGameState(prev => {
         const newState = moveSnake(prev);
-        
+
         if (newState.status === 'game-over' && prev.status === 'playing') {
           handleGameOver(newState.score);
         }
-        
+
         return newState;
       });
     }, 150);
@@ -90,7 +90,7 @@ const Game = () => {
 
   const handleGameOver = async (score: number) => {
     try {
-      await mockApi.leaderboard.submitScore(score, mode);
+      await api.leaderboard.submitScore(score, mode);
       toast.success(`Game Over! Score: ${score}`);
     } catch (error) {
       console.error('Failed to submit score:', error);

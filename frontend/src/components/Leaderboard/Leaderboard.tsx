@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { LeaderboardEntry, GameMode } from '@/types/game';
-import { mockApi } from '@/lib/mockApi';
+import { api } from '@/lib/api';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Trophy, Medal, Award } from 'lucide-react';
@@ -17,7 +17,7 @@ export const Leaderboard = () => {
   const loadLeaderboard = async () => {
     setIsLoading(true);
     try {
-      const data = await mockApi.leaderboard.getEntries(mode);
+      const data = await api.leaderboard.getEntries(mode);
       setEntries(data);
     } catch (error) {
       console.error('Failed to load leaderboard:', error);
