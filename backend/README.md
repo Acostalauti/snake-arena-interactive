@@ -10,6 +10,14 @@
 
 ## Running the Server
 
+### Using Makefile (Recommended)
+
+```bash
+make dev
+```
+
+### Manual Command
+
 To start the development server with hot reload:
 
 ```bash
@@ -18,6 +26,19 @@ uv run uvicorn app.main:app --reload
 
 The API will be available at `http://localhost:8000`.
 API Documentation (Swagger UI) is available at `http://localhost:8000/docs`.
+
+## Common Commands
+
+View all available Makefile commands:
+
+```bash
+make help
+```
+
+- `make install` - Install/sync dependencies
+- `make dev` - Run development server
+- `make test` - Run tests
+- `make clean` - Remove generated files and caches
 
 ## Running Tests
 
