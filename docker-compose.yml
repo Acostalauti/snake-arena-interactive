@@ -20,9 +20,9 @@ services:
 
   backend:
     build:
-      context: ./backend
+      context: .
       dockerfile: Dockerfile
-    container_name: snake-arena-backend
+    container_name: snake-arena-app
     environment:
       DATABASE_URL: postgresql://postgres:postgres@postgres:5432/snake_arena
       SECRET_KEY: dev-secret-key-change-in-production
@@ -31,18 +31,6 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    networks:
-      - snake-arena-network
-
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    container_name: snake-arena-frontend
-    ports:
-      - "80:80"
-    depends_on:
-      - backend
     networks:
       - snake-arena-network
 

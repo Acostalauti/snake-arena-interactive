@@ -32,11 +32,10 @@ A competitive snake game with real-time leaderboards and spectator mode. Built w
 
    This will start:
    - PostgreSQL database on port 5432
-   - FastAPI backend on port 8000
-   - nginx frontend on port 80
+   - Unified application (backend API + frontend) on port 8000
 
 3. **Access the application**
-   - Frontend: http://localhost
+   - Application: http://localhost:8000
    - Backend API docs: http://localhost:8000/docs
 
 4. **View logs**
@@ -46,7 +45,6 @@ A competitive snake game with real-time leaderboards and spectator mode. Built w
 
    # Specific service
    docker-compose logs -f backend
-   docker-compose logs -f frontend
    docker-compose logs -f postgres
    ```
 
@@ -138,16 +136,19 @@ snake-arena-interactive/
 │   │   ├── db_models.py # SQLAlchemy models
 │   │   └── auth.py      # Authentication routes
 │   ├── tests_integration/ # Integration tests
-│   ├── Dockerfile       # Backend container
+│   ├── Dockerfile       # Backend-only container (legacy)
 │   └── pyproject.toml   # Python dependencies
 ├── frontend/            # React frontend
 │   ├── src/            # Source code
 │   ├── public/         # Static assets
-│   ├── Dockerfile      # Frontend container
-│   ├── nginx.conf      # nginx configuration
+│   ├── Dockerfile      # Frontend-only container (legacy)
+│   ├── nginx.conf      # nginx configuration (for standalone frontend)
 │   └── package.json    # Node dependencies
+├── Dockerfile          # Unified container (backend + frontend)
 └── docker-compose.yml  # Docker orchestration
 ```
+
+**Note**: The unified `Dockerfile` at the project root builds both frontend and backend into a single container. The individual `Dockerfile`s in `backend/` and `frontend/` directories are kept for local development flexibility.
 
 ## Environment Variables
 
@@ -206,14 +207,15 @@ rm backend/snake_arena.db
 
 ### Port Conflicts
 
-If ports 80, 8000, or 5432 are already in use:
+If ports 8000 or 5432 are already in use:
 
 1. **Edit docker-compose.yml** and change the port mappings:
    ```yaml
    ports:
-     - "8080:80"  # Change 80 to 8080 for frontend
-     - "8001:8000" # Change 8000 to 8001 for backend
+     - "8001:8000"  # Change 8000 to 8001 for the application
    ```
+
+2. **Access the application** at http://localhost:8001
 
 ### Database Connection Issues
 
@@ -231,11 +233,11 @@ docker-compose restart postgres
 ### Frontend Not Loading
 
 ```bash
-# Rebuild frontend
-docker-compose up -d --build frontend
+# Rebuild the unified container
+docker-compose up -d --build backend
 
-# Check nginx logs
-docker-compose logs frontend
+# Check application logs
+docker-compose logs backend
 ```
 
 ## API Documentation
@@ -245,6 +247,34 @@ Once the backend is running, visit:
 - ReDoc: http://localhost:8000/redoc
 - OpenAPI JSON: http://localhost:8000/openapi.json
 
+## Deploying to Render
+
+Deploy to Render cloud platform with one click using the Blueprint:
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy)
+
+### Quick Deploy
+
+1. Push your code to GitHub
+2. Go to [Render Dashboard](https://dashboard.render.com/)
+3. Create **New Blueprint** and connect your repository
+4. Render automatically detects `render.yaml` and sets up:
+   - PostgreSQL database (free tier)
+   - Unified web service (backend + frontend)
+5. Your app will be live at `https://snake-arena-app.onrender.com`
+
+**Free tier includes:**
+- 750 hours/month runtime
+- PostgreSQL database
+- Automatic HTTPS
+- Auto-deploy from Git
+
+> [!NOTE]
+> Free tier services spin down after 15 minutes of inactivity (30-60s cold start). Upgrade to $7/month for always-on service.
+
+For detailed deployment instructions, troubleshooting, and custom domain setup, see the [Render Deployment Guide](RENDER_DEPLOY.md).
+
 ## License
 
 MIT
+
