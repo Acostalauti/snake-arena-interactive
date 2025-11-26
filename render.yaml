@@ -1,15 +1,4 @@
 services:
-  # PostgreSQL Database
-  - type: pserv
-    name: snake-arena-db
-    env: docker
-    plan: free
-    region: oregon
-    databases:
-      - name: snakearena
-        databaseName: snake_arena
-        user: snake_arena_user
-    
   # Web Service (Backend + Frontend Unified Container)
   - type: web
     name: snake-arena-app
