@@ -20,7 +20,9 @@ jobs:
     steps:
       - name: Trigger Render Deployment
         run: |
-          if [ -z "${{ secrets.RENDER_DEPLOY_HOOK_URL }}" ]; then
+          DEPLOY_URL="${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
+          
+          if [ -z "$DEPLOY_URL" ]; then
             echo "⚠️  WARNING: RENDER_DEPLOY_HOOK_URL secret is not set"
             echo "Please configure the deploy hook URL in your GitHub repository secrets"
             echo "See: https://github.com/${{ github.repository }}/settings/secrets/actions"
@@ -28,7 +30,13 @@ jobs:
           fi
           
           echo "🚀 Triggering deployment to Render..."
-          curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
-          echo ""
-          echo "✅ Deployment triggered successfully!"
-          echo "Monitor deployment progress at: https://dashboard.render.com"
+          if curl -f -X POST "$DEPLOY_URL"; then
+            echo ""
+            echo "✅ Deployment triggered successfully!"
+            echo "Monitor deployment progress at: https://dashboard.render.com"
+          else
+            echo ""
+            echo "❌ Failed to trigger deployment"
+            echo "Please verify your RENDER_DEPLOY_HOOK_URL is correct"
+            exit 1
+          fi
