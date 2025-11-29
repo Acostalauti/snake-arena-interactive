@@ -10,6 +10,49 @@ A competitive snake game with real-time leaderboards and spectator mode. Built w
 - 🔐 User authentication and profiles
 - 📊 Score tracking and statistics
 
+## CI/CD Pipeline
+
+![CI Status](https://github.com/YOUR_USERNAME/YOUR_REPO/actions/workflows/ci.yml/badge.svg)
+
+This project uses GitHub Actions for continuous integration and deployment:
+
+- **Automated Testing**: All pushes and pull requests trigger backend (pytest) and frontend (vitest) tests
+- **Automatic Deployment**: When tests pass on `main` branch, changes are automatically deployed to Render
+
+### GitHub Actions Workflows
+
+- **[CI - Run Tests](.github/workflows/ci.yml)**: Runs backend and frontend tests in parallel
+- **[CD - Deploy to Render](.github/workflows/deploy.yml)**: Deploys to Render after successful tests
+
+### Setup Deploy Hook
+
+To enable automatic deployment to Render:
+
+1. Go to your [Render Dashboard](https://dashboard.render.com/)
+2. Select your `snake-arena-app` web service
+3. Navigate to Settings → Deploy Hook
+4. Copy the deploy hook URL
+5. In your GitHub repository, go to Settings → Secrets and variables → Actions
+6. Create a new secret:
+   - **Name**: `RENDER_DEPLOY_HOOK_URL`
+   - **Value**: Paste the deploy hook URL
+7. Save the secret
+
+Once configured, every merge to `main` will automatically deploy to Render after tests pass.
+
+### Running Tests Locally
+
+```bash
+# Backend tests
+cd backend
+make test
+
+# Frontend tests
+cd frontend
+npm test
+```
+
+
 ## Quick Start with Docker (Recommended)
 
 ### Prerequisites
