@@ -1,4 +1,4 @@
-name: CI - Run Tests
+name: CI/CD Pipeline
 
 on:
   push:
@@ -59,3 +59,35 @@ jobs:
       
       - name: Run frontend tests
         run: npm test
+
+  deploy:
+    name: Deploy to Render
+    runs-on: ubuntu-latest
+    
+    # Only deploy if all tests pass and it's a push to main (not a PR)
+    needs: [test-backend, test-frontend]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: Trigger Render Deployment
+        run: |
+          DEPLOY_URL="${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
+          
+          if [ -z "$DEPLOY_URL" ]; then
+            echo "⚠️  WARNING: RENDER_DEPLOY_HOOK_URL secret is not set"
+            echo "Please configure the deploy hook URL in your GitHub repository secrets"
+            echo "See: https://github.com/${{ github.repository }}/settings/secrets/actions"
+            exit 1
+          fi
+          
+          echo "🚀 Triggering deployment to Render..."
+          if curl -f -X POST "$DEPLOY_URL"; then
+            echo ""
+            echo "✅ Deployment triggered successfully!"
+            echo "Monitor deployment progress at: https://dashboard.render.com"
+          else
+            echo ""
+            echo "❌ Failed to trigger deployment"
+            echo "Please verify your RENDER_DEPLOY_HOOK_URL is correct"
+            exit 1
+          fi
